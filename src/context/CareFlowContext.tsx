@@ -94,10 +94,9 @@ const LOCAL_STORAGE_KEY_THRESHOLD = 'careflow_fever_threshold_v1';
 
 export function CareFlowProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<StaffRole>('Doctor');
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [waitingList, setWaitingList] = useState<WaitingListCandidate[]>([]);
-  const [activityLog, setActivityLog] = useState<ActivityItem[]>([]);
+  const [patients, setPatients] = useState<Patient[]>(generateInitialPatients);
+  const [waitingList, setWaitingList] = useState<WaitingListCandidate[]>(INITIAL_WAITING_LIST);
+  const [activityLog, setActivityLog] = useState<ActivityItem[]>(INITIAL_ACTIVITY_LOG);
   const [outcomesCohort] = useState<OutcomesCohort>(INITIAL_OUTCOMES_COHORT);
   const [feverThreshold, setFeverThreshold] = useState<number>(FEVER_THRESHOLD_CELSIUS);
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,36 +114,18 @@ export function CareFlowProvider({ children }: { children: ReactNode }) {
 
       if (storedPatients) {
         setPatients(JSON.parse(storedPatients));
-      } else {
-        const initial = generateInitialPatients();
-        setPatients(initial);
-        localStorage.setItem(LOCAL_STORAGE_KEY_PATIENTS, JSON.stringify(initial));
       }
-
       if (storedWaiting) {
         setWaitingList(JSON.parse(storedWaiting));
-      } else {
-        setWaitingList(INITIAL_WAITING_LIST);
-        localStorage.setItem(LOCAL_STORAGE_KEY_WAITING, JSON.stringify(INITIAL_WAITING_LIST));
       }
-
       if (storedActivity) {
         setActivityLog(JSON.parse(storedActivity));
-      } else {
-        setActivityLog(INITIAL_ACTIVITY_LOG);
-        localStorage.setItem(LOCAL_STORAGE_KEY_ACTIVITY, JSON.stringify(INITIAL_ACTIVITY_LOG));
       }
-
       if (storedThreshold) {
         setFeverThreshold(Number(storedThreshold));
       }
     } catch (e) {
-      console.error('Failed to parse localStorage, resetting to initial demo data', e);
-      setPatients(generateInitialPatients());
-      setWaitingList(INITIAL_WAITING_LIST);
-      setActivityLog(INITIAL_ACTIVITY_LOG);
-    } finally {
-      setIsLoaded(true);
+      console.error('Failed to parse localStorage', e);
     }
   }, []);
 
@@ -400,10 +381,10 @@ export function CareFlowProvider({ children }: { children: ReactNode }) {
       completedBy: doctorName,
       clinicalException: isException
         ? {
-            reason: exceptionReason || 'Emergency clinical review conducted prior to temperature log',
-            confirmedBy: doctorName,
-            timestamp: new Date().toISOString(),
-          }
+          reason: exceptionReason || 'Emergency clinical review conducted prior to temperature log',
+          confirmedBy: doctorName,
+          timestamp: new Date().toISOString(),
+        }
         : undefined,
     };
 
@@ -740,9 +721,9 @@ export function CareFlowProvider({ children }: { children: ReactNode }) {
       value={{
         role,
         setRole,
-        patients: isLoaded ? patients : [],
-        waitingList: isLoaded ? waitingList : [],
-        activityLog: isLoaded ? activityLog : [],
+        patients,
+        waitingList,
+        activityLog,
         outcomesCohort,
         feverThreshold,
         setFeverThreshold,

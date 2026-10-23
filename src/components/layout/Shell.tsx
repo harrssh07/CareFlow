@@ -136,54 +136,51 @@ export function Shell({ children, onOpenResetModal, onOpenAdmissionModal }: Shel
             const Icon = item.icon;
             const isActive = activeSection === item.id;
             return (
-              <React.Fragment key={item.id}>
-                <button
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition group ${
-                    isActive
-                      ? 'bg-teal text-white shadow-sm'
-                      : 'text-slate-300 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-teal/80 group-hover:text-teal'}`} />
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] ${item.badgeColor}`}>
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-
-                {/* Facility Capacity Widget placed below Overview */}
-                {item.id === 'overview' && (
-                  <div className="p-3 my-2 bg-white/5 rounded-xl border border-white/10 text-xs space-y-2">
-                    <div className="flex items-center justify-between text-slate-300">
-                      <span className="text-[11px] uppercase font-bold text-slate-400">Occupancy</span>
-                      <span className="font-mono font-bold text-white">
-                        {occupiedBedsCount} / {maxCapacity}
-                      </span>
-                    </div>
-                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${
-                          occupiedBedsCount >= maxCapacity ? 'bg-amber-400' : 'bg-teal'
-                        }`}
-                        style={{ width: `${(occupiedBedsCount / maxCapacity) * 100}%` }}
-                      />
-                    </div>
-                    <p className="text-[10px] text-slate-400">
-                      {occupiedBedsCount >= maxCapacity
-                        ? 'Capacity limit reached (74/74)'
-                        : `${maxCapacity - occupiedBedsCount} bed(s) available for intake`}
-                    </p>
-                  </div>
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition group ${
+                  isActive
+                    ? 'bg-teal text-white shadow-sm'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-teal/80 group-hover:text-teal'}`} />
+                  <span>{item.label}</span>
+                </div>
+                {item.badge && (
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] ${item.badgeColor}`}>
+                    {item.badge}
+                  </span>
                 )}
-              </React.Fragment>
+              </button>
             );
           })}
         </nav>
+
+        {/* Facility Capacity Widget in Sidebar */}
+        <div className="p-4 mx-3 mb-3 bg-white/5 rounded-xl border border-white/10 text-xs space-y-2">
+          <div className="flex items-center justify-between text-slate-300">
+            <span className="text-[11px] uppercase font-bold text-slate-400">Occupancy</span>
+            <span className="font-mono font-bold text-white">
+              {occupiedBedsCount} / {maxCapacity}
+            </span>
+          </div>
+          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${
+                occupiedBedsCount >= maxCapacity ? 'bg-amber-400' : 'bg-teal'
+              }`}
+              style={{ width: `${(occupiedBedsCount / maxCapacity) * 100}%` }}
+            />
+          </div>
+          <p className="text-[10px] text-slate-400">
+            {occupiedBedsCount >= maxCapacity
+              ? 'Capacity limit reached (74/74)'
+              : `${maxCapacity - occupiedBedsCount} bed(s) available for intake`}
+          </p>
+        </div>
 
         {/* Staff Role Simulation Footer */}
         <div className="p-4 border-t border-navy-light/60 bg-[#0E1C2E]">
@@ -284,8 +281,14 @@ export function Shell({ children, onOpenResetModal, onOpenAdmissionModal }: Shel
             )}
           </div>
 
-          {/* Right Controls: Role Badge, Reset button */}
+          {/* Right Controls: Role Badge, Demo indicator, Reset button */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Demo Mode Badge */}
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-[11px] font-medium">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              <span>Assessment Demo Mode</span>
+            </div>
+
             {/* Role Switcher Pill (Tablet / Mobile friendly) */}
             <div className="flex items-center gap-1 bg-gray-100 p-0.5 rounded-lg text-xs font-semibold">
               <span className="text-[11px] text-gray-500 px-2 hidden sm:inline">Role:</span>
@@ -324,35 +327,29 @@ export function Shell({ children, onOpenResetModal, onOpenAdmissionModal }: Shel
                 const Icon = item.icon;
                 const isActive = activeSection === item.id;
                 return (
-                  <React.Fragment key={item.id}>
-                    <button
-                      onClick={() => handleNavClick(item.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition ${
-                        isActive ? 'bg-teal text-white' : 'text-slate-300 hover:bg-white/10'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Icon className="w-4 h-4 text-teal" />
-                        <span>{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] ${item.badgeColor}`}>
-                          {item.badge}
-                        </span>
-                      )}
-                    </button>
-                    {item.id === 'overview' && (
-                      <div className="p-2.5 my-1.5 bg-white/5 rounded-lg border border-white/10 text-[11px] text-slate-300 flex items-center justify-between">
-                        <span className="uppercase font-semibold text-slate-400">Occupancy:</span>
-                        <span className="font-mono font-bold text-white">{occupiedBedsCount} / {maxCapacity} Beds</span>
-                      </div>
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition ${
+                      isActive ? 'bg-teal text-white' : 'text-slate-300 hover:bg-white/10'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 text-teal" />
+                      <span>{item.label}</span>
+                    </div>
+                    {item.badge && (
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] ${item.badgeColor}`}>
+                        {item.badge}
+                      </span>
                     )}
-                  </React.Fragment>
+                  </button>
                 );
               })}
             </nav>
 
-            <div className="pt-3 border-t border-white/10 flex items-center justify-end text-xs text-slate-300">
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
+              <span>Facility Occupancy: {occupiedBedsCount}/{maxCapacity}</span>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
