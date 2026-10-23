@@ -259,10 +259,10 @@ export function PatientDirectory({
         </div>
       ) : (
         /* PATIENT TABLE VIEW */
-        <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden flex flex-col">
+          <div className="overflow-x-auto max-h-[580px] sm:max-h-[640px] overflow-y-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-gray-50/80 text-gray-500 border-b border-gray-200 font-semibold uppercase tracking-wider text-[11px]">
+              <thead className="sticky top-0 bg-gray-50 text-gray-500 border-b border-gray-200 font-semibold uppercase tracking-wider text-[11px] shadow-xs z-10">
                 <tr>
                   <th className="py-3 px-4">Patient / ID</th>
                   <th className="py-3 px-3">Bed & Ward</th>
